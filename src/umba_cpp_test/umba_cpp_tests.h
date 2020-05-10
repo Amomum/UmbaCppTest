@@ -95,13 +95,25 @@ namespace umba
 static int runLocalGroup(void)                                                                \
 {                                                                                             \
     int groupResult = 0;                                                                      \
+                                                                                              \
+    uint8_t maxTestNameSize = 0;                                                              \
+    for ( uint8_t i = 0; i < addedTests; i++ )                                                \
+    {                                                                                         \
+        if ( namesSize[i] > maxTestNameSize )                                                 \
+        {                                                                                     \
+            maxTestNameSize = namesSize[i];                                                   \
+        }                                                                                     \
+    }                                                                                         \
+                                                                                              \
+    printf("\nStarting tests in group \"%s\":\n", groupName);                                 \
+                                                                                              \
     for(uint32_t i=0; i<addedTests; i++)                                                      \
     {                                                                                         \
                                                                                               \
         ::umba::incrementTestsRun();                                                          \
         setup();                                                                              \
                                                                                               \
-        printf("Starting test -- %s -- in group \"%s\"", testNames[i], groupName);            \
+        printf("Test -- %s ", testNames[i]);                                                  \
                                                                                               \
         const char * result = tests[i]( testNames[i] );                                       \
                                                                                               \
@@ -111,14 +123,20 @@ static int runLocalGroup(void)                                                  
         /* в режиме с остановкой - тест сам выведет сообщение*/                               \
         if( result != 0)                                                                      \
         {                                                                                     \
-            printf("\n\nIn group \"%s\" failed test \"%s\":\n  ", groupName, testNames[i]);   \
+            const char * fail = "...FAIL\n";                                                  \
+            uint8_t offset = maxTestNameSize - namesSize[i] + 7;                              \
+            printf("%s%*s%s", RED_FG, offset, fail, COLOR_RESET);                             \
+                                                                                              \
+            printf("%s\n\nIn group \"%s\" failed test \"%s\":\n", RED_BG, groupName, testNames[i]);    \
             fputs(result, stdout);                                                            \
-            printf("\n\n");                                                                   \
+            printf("\n\n%s", COLOR_RESET);                                                    \
             groupResult = 1;                                                                  \
         }                                                                                     \
         else                                                                                  \
         {                                                                                     \
-            printf("...OK\n");                                                                \
+            const char * ok = "...OK\n";                                                      \
+            uint8_t offset = maxTestNameSize - namesSize[i] + 6;                              \
+            printf("%s%*s%s", GREEN_FG, offset, ok, COLOR_RESET);                             \
         }                                                                                     \
                                                                                               \
     }                                                                                         \
@@ -177,9 +195,11 @@ namespace umba                                                                  
                                                                                                   \
     static const char * testNames[ ::umba::tests_in_group_max ];                                  \
                                                                                                   \
+    static uint8_t namesSize[ ::umba::tests_in_group_max ];                                       \
+                                                                                                  \
     static uint32_t addedTests = 0;                                                               \
                                                                                                   \
-    static void addTestToGroup(TestFunction test, const char * testName)                          \
+    static void addTestToGroup(TestFunction test, const char * testName, uint8_t nameSize)        \
     {                                                                                             \
         /* группа добавляется в список групп */                                                   \
         if(addedTests == 0)                                                                       \
@@ -196,6 +216,7 @@ namespace umba                                                                  
                                                                                                   \
         tests[addedTests] = test;                                                                 \
         testNames[addedTests] = testName;                                                         \
+        namesSize[addedTests] = nameSize;                                                         \
         addedTests++;                                                                             \
     }                                                                                             \
                                                                                                   \
@@ -203,7 +224,6 @@ namespace umba                                                                  
                                                                                                   \
                                                                                                   \
 }
-
 
 // вспомогательные макросы
 #define UMBA_CONCAT2(x, y)  x ## y
@@ -217,7 +237,7 @@ namespace umba                                                                  
                                                                                                                                 \
                                 UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                             \
                                     /* добавляем тест в текущую группу */                                                       \
-                                    umba::addTestToGroup(umba::UMBA_CONCAT(doTest, __LINE__), name);                            \
+                                    umba::addTestToGroup(umba::UMBA_CONCAT(doTest, __LINE__), name, NUM_ELEM(name));            \
                                 }                                                                                               \
                                                                                                                                 \
                                                                                                                                 \
@@ -262,7 +282,7 @@ namespace umba                                                                  
                                                            printf(message);                         \
                                                                                                     \
                                                            UMBA_TEST_DISABLE_IRQ();                 \
-                                                           while(1) { __BKPT(0xAB);                 \
+                                                           while(1) { /*__BKPT(0xAB); */            \
                                                                       if(false) return message; }   \
                                                         }                                           \
                                                    } while (0)
@@ -280,4 +300,3 @@ namespace umba                                                                  
                                                      } while (0)
 
 #endif
-
