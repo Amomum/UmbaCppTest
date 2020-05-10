@@ -305,3 +305,34 @@ namespace umba                                                                  
                                                      } while (0)
 
 #endif
+
+
+
+// Добавочные макросы, чтобы чек можно было делать внутри функции
+
+#define UMBA_CHECK_F(...)  UMBA_GET_MACRO(__VA_ARGS__, UMBA_CHECK_F_WITH_TEXT, UMBA_CHECK_F_NO_TEXT, DUMMY ) (__VA_ARGS__)
+#define UMBA_CHECK_F_NO_TEXT(test)          UMBA_CHECK_F_WITH_TEXT( test, "fail")
+
+#if UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED == 1
+
+    #define UMBA_CHECK_F_WITH_TEXT(test, message)   \
+    {                                               \
+        if( ! (test) )                              \
+        {                                           \
+           printf("%s", message);                   \
+           UMBA_TEST_DISABLE_IRQ();                 \
+           while(1)                                 \
+           {                                        \
+               UMBA_TEST_STOP_DEBUGGER();           \
+               if(false) return message;            \
+           }                                        \
+        }                                           \
+    }
+
+#else
+
+    #define UMBA_CHECK_F_WITH_TEXT(test, message) { if( ! (test) ) { return message; } }
+
+#endif
+
+#define UMBA_CHECK_CALL( call ) { auto r = call; UMBA_CHECK( r == nullptr, r ); }
