@@ -125,18 +125,19 @@ static int runLocalGroup(void)                                                  
         {                                                                                     \
             const char * fail = "...FAIL\n";                                                  \
             uint8_t offset = maxTestNameSize - namesSize[i] + 7;                              \
-            printf("%s%*s%s", RED_FG, offset, fail, COLOR_RESET);                             \
+            printf("%s%*s%s", ::umba::RED_FG, offset, fail, ::umba::COLOR_RESET);             \
                                                                                               \
-            printf("%s\n\nIn group \"%s\" failed test \"%s\":\n", RED_BG, groupName, testNames[i]);    \
+            printf("%s\n\nIn group \"%s\" failed test \"%s\":\n",                             \
+                    ::umba::RED_BG, groupName, testNames[i]);                                 \
             fputs(result, stdout);                                                            \
-            printf("\n\n%s", COLOR_RESET);                                                    \
+            printf("\n\n%s", ::umba::COLOR_RESET);                                            \
             groupResult = 1;                                                                  \
         }                                                                                     \
         else                                                                                  \
         {                                                                                     \
             const char * ok = "...OK\n";                                                      \
             uint8_t offset = maxTestNameSize - namesSize[i] + 6;                              \
-            printf("%s%*s%s", GREEN_FG, offset, ok, COLOR_RESET);                             \
+            printf("%s%*s%s", ::umba::GREEN_FG, offset, ok, ::umba::COLOR_RESET);             \
         }                                                                                     \
                                                                                               \
     }                                                                                         \
@@ -237,7 +238,7 @@ namespace umba                                                                  
                                                                                                                                 \
                                 UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                             \
                                     /* добавляем тест в текущую группу */                                                       \
-                                    umba::addTestToGroup(umba::UMBA_CONCAT(doTest, __LINE__), name, NUM_ELEM(name));            \
+                                    umba::addTestToGroup( umba::UMBA_CONCAT(doTest, __LINE__), name, NUM_ELEM(name));           \
                                 }                                                                                               \
                                                                                                                                 \
                                                                                                                                 \
@@ -262,7 +263,8 @@ namespace umba                                                                  
 // c помощью небольшой магии его можно вызывать как с одним аргументом - условием для проверки
 // так и с двумя - условием и текстом сообщения
 
-#define UMBA_CHECK(...)    UMBA_GET_MACRO(__VA_ARGS__, UMBA_CHECK_WITH_TEXT, UMBA_CHECK_NO_TEXT) (__VA_ARGS__)
+// DUMMY нужен, чтобы убрать ворнинг про "ISO C++11 requires at least one argument for the "..." in a variadic macro"
+#define UMBA_CHECK(...)  UMBA_GET_MACRO(__VA_ARGS__, UMBA_CHECK_WITH_TEXT, UMBA_CHECK_NO_TEXT, DUMMY ) (__VA_ARGS__)
 
 // версия проверки без сообщения об ошибке
 #define UMBA_CHECK_NO_TEXT( test ) UMBA_CHECK_WITH_TEXT( test, "CHECK FAILED")
@@ -279,11 +281,14 @@ namespace umba                                                                  
                                                            fputs(umbaTestName, stdout);             \
                                                                                                     \
                                                            printf("\n");                            \
-                                                           printf(message);                         \
+                                                           printf("%s", message);                   \
                                                                                                     \
                                                            UMBA_TEST_DISABLE_IRQ();                 \
-                                                           while(1) { /*__BKPT(0xAB); */            \
-                                                                      if(false) return message; }   \
+                                                           while(1)                                 \
+                                                           {                                        \
+                                                               UMBA_TEST_STOP_DEBUGGER();           \
+                                                               if(false) return message;            \
+                                                           }                                        \
                                                         }                                           \
                                                    } while (0)
 
