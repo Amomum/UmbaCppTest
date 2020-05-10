@@ -6,18 +6,15 @@
 #define UMBA_TEST_LOGGING_ENABLED        1
 
 // выключить подвисание на упавшем тесте
-#define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      0
-
 #ifndef USE_DOCKER
-    #define UMBA_TEST_DISABLE_IRQ()  __disable_irq()
+    #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      1
+    #define UMBA_TEST_DISABLE_IRQ()                    __disable_irq()
+    #define UMBA_TEST_STOP_DEBUGGER()                  __BKPT(0xAA)
 #else
+    #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      1
     #define UMBA_TEST_DISABLE_IRQ()
+    #define UMBA_TEST_STOP_DEBUGGER()
 #endif
-
-const char COLOR_RESET[] = "\x1b[0m";
-const char RED_FG[]     = "\x1b[31m";
-const char GREEN_FG[]   = "\x1b[32m";
-const char RED_BG[]     = "\x1b[41m";
 
 namespace umba
 {
@@ -29,5 +26,9 @@ namespace umba
     
     // простой коллбэк в стиле С
     typedef void (*TaskCycleCallback)(void);
-        
+    
+    constexpr char COLOR_RESET[] = "\x1b[0m";
+    constexpr char RED_FG[]     = "\x1b[31m";
+    constexpr char GREEN_FG[]   = "\x1b[32m";
+    constexpr char RED_BG[]     = "\x1b[41m";
 }
