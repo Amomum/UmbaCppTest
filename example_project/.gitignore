@@ -1,0 +1,9 @@
+**/DebugConfig
+**/Debug
+**/.settings
+**/lst
+**/obj
+**/RTE
+*.uvgui
+*.uvguix
+*.scvd
