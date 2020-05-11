@@ -27,8 +27,8 @@ namespace umba
     // простой коллбэк в стиле С
     typedef void (*TaskCycleCallback)(void);
     
-    constexpr char COLOR_RESET[] = "\x1b[0m";
-    constexpr char RED_FG[]     = "\x1b[31m";
-    constexpr char GREEN_FG[]   = "\x1b[32m";
-    constexpr char RED_BG[]     = "\x1b[41m";
+    const char COLOR_RESET[] = "\x1b[0m";
+    const char RED_FG[]     = "\x1b[31m";
+    const char GREEN_FG[]   = "\x1b[32m";
+    const char RED_BG[]     = "\x1b[41m";
 }

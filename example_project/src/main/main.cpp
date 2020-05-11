@@ -1,5 +1,5 @@
 #include "project_config.h"
-#include "umba_cpp_test/umba_cpp_tests.h"
+#include "umba_cpp_tests.h"
 
 int main(void)
 {

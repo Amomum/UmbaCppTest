@@ -1,0 +1,6 @@
+/example_project/DebugConfig
+/example_project/lst
+/example_project/obj
+/example_project/RTE
+*.uvgui.*
+*.scvd
