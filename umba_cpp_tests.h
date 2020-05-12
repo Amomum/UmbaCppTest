@@ -56,7 +56,8 @@ namespace umba
     
     typedef int (*GroupRunner)(void);
     
-    void runAllTests();
+    // возвращает 0, если все тесты пройдены успешно
+    int runAllTests();
     
     void addTestGroupRunner(GroupRunner groupRunner);
 

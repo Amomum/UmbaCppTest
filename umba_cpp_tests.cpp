@@ -45,7 +45,7 @@ namespace umba
         addedGroups++;
     }
 
-    void runAllTests()
+    int runAllTests()
     {
         bool allOk = true;
         
@@ -69,6 +69,9 @@ namespace umba
         {
             printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
+
+        // чтобы код возврата совпадал с кодом для main'a
+        return allOk != true;
 
     }
 
