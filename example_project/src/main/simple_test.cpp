@@ -7,7 +7,7 @@
 namespace
 {
 
-    UMBA_TEST_GROUP("Groro")
+    UMBA_TEST_GROUP("Simple tests of simple things")
 
     /***************************************************************************************************
                                            Тестовые данные
@@ -27,33 +27,39 @@ namespace
 
     UMBA_TEST_SETUP()
     {
-        printf("Groro setup\n");
+        //printf("setup\n");
     }
 
     UMBA_TEST_TEARDOWN()
     {
-        printf("\nGroro teardown\n");
+        //printf("\nteardown\n");
     }
+
 
     /***************************************************************************************************
                                                  Тесты
     ***************************************************************************************************/
 
-
-    UMBA_TEST("Doing lalala - should do lololo")
+    UMBA_TEST("This test will pass")
     {
-        UMBA_CHECK( 1 == 1, "One should be equal to one");
-
+        UMBA_CHECK( true, "True is always true" );
+        
         return 0;
 
     }
 
-    UMBA_TEST("Lololo")
+    UMBA_TEST("This test will also pass")
     {
+        UMBA_CHECK( true, "True is always true" );
         return 0;
-
     }
-    
+
+    UMBA_TEST("This test will always fail")
+    {
+        UMBA_CHECK( false, "Who's fault is it? It's SEGMENTATION FAULT!" );
+        return 0;
+    }
+
 } // anonymous namespace   
 
 #endif

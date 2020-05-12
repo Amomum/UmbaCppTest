@@ -11,7 +11,7 @@
     #define UMBA_TEST_DISABLE_IRQ()                    __disable_irq()
     #define UMBA_TEST_STOP_DEBUGGER()                  __BKPT(0xAA)
 #else
-    #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      1
+    #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      0
     #define UMBA_TEST_DISABLE_IRQ()
     #define UMBA_TEST_STOP_DEBUGGER()
 #endif

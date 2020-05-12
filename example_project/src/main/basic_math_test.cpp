@@ -7,7 +7,7 @@
 namespace
 {
 
-    UMBA_TEST_GROUP("Grara")
+    UMBA_TEST_GROUP("Basic math tests")
 
     /***************************************************************************************************
                                            Тестовые данные
@@ -27,36 +27,36 @@ namespace
 
     UMBA_TEST_SETUP()
     {
-        printf("Grara setup\n");
+        //printf("--Basic math setup\n");
     }
 
     UMBA_TEST_TEARDOWN()
     {
-        printf("\nGrara teardown\n");
+        //printf("\n--Basic math teardown\n");
     }
-
 
     /***************************************************************************************************
                                                  Тесты
     ***************************************************************************************************/
 
-    UMBA_TEST("Doing lololo - should do lalala")
+
+    UMBA_TEST("Equivalence test - numbers should be equal to themselves")
     {
-        UMBA_CHECK( 1 == 2, "One should be equal to two" );
-        
-        UMBA_CHECK( 1 == 1);
-        
+        UMBA_CHECK( 1 == 1, "One should be equal to one");
+        UMBA_CHECK( 2 == 2, "Two should be equal to two");
 
         return 0;
 
     }
 
-    UMBA_TEST("Lololo")
+    UMBA_TEST("Adding two and two - should be equal to four")
     {
+        UMBA_CHECK( 2+2 == 4, "Two plus two should be four");
+
         return 0;
 
     }
-
+    
 } // anonymous namespace   
 
 #endif

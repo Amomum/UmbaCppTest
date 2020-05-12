@@ -403,14 +403,14 @@
               <FilePath>.\src\Main\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>example_test.cpp</FileName>
+              <FileName>basic_math_test.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\Main\example_test.cpp</FilePath>
+              <FilePath>.\src\main\basic_math_test.cpp</FilePath>
             </File>
             <File>
-              <FileName>example_test_2.cpp</FileName>
+              <FileName>simple_test.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\Main\example_test_2.cpp</FilePath>
+              <FilePath>.\src\main\simple_test.cpp</FilePath>
             </File>
           </Files>
         </Group>

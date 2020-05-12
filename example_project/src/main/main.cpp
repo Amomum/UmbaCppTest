@@ -5,8 +5,13 @@ int main(void)
 {
     #ifdef USE_TESTS
     
-        umba::runAllTests();    
-        while(1);
+        umba::runAllTests();
+
+        #ifdef USE_DOCKER
+            return 0;
+        #else
+            while(1);
+        #endif
         
     #endif
     
