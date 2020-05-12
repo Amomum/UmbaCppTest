@@ -7,3 +7,4 @@
 *.uvgui
 *.uvguix
 *.scvd
+/Docker/
