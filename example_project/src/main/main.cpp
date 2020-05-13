@@ -3,12 +3,16 @@
 
 int main(void)
 {
+
+    // TODO добавь макросы для ловли ассертов
+
     #ifdef USE_TESTS
     
-        umba::runAllTests();
+        auto res = umba::runAllTests();
+        (void)res;
 
         #ifdef USE_DOCKER
-            return 0;
+            return res;
         #else
             while(1);
         #endif

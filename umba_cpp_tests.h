@@ -46,6 +46,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #include "umba_cpp_test_config.h"
 
@@ -76,7 +77,11 @@ namespace umba
     // т.е. на каждом обороте цикла
     void setTaskCycleCallback( TaskCycleCallback cb );
 
-
+    template< typename T, size_t N >
+    inline size_t getArraySize( T (&)[N] )
+    {
+        return N;
+    }
 
 } // namespace umba
 
@@ -232,20 +237,20 @@ namespace umba                                                                  
 #define UMBA_CONCAT(x, y) UMBA_CONCAT2(x,y)
 
 
-#define UMBA_TEST( name )   namespace umba{ static const char * UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName);  }    \
-                            namespace {                                                                                         \
-                            class UMBA_CONCAT(UmbaTest_, __LINE__){                                                             \
-                                public:                                                                                         \
-                                                                                                                                \
-                                UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                             \
-                                    /* добавляем тест в текущую группу */                                                       \
-                                    umba::addTestToGroup( umba::UMBA_CONCAT(doTest, __LINE__), name, NUM_ELEM(name));           \
-                                }                                                                                               \
-                                                                                                                                \
-                                                                                                                                \
-                            };                                                                                                  \
-                            static UMBA_CONCAT(UmbaTest_, __LINE__) UMBA_CONCAT(umbaTest_, __LINE__);                           \
-                            }                                                                                                   \
+#define UMBA_TEST( name )   namespace umba{ static const char * UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName);  }      \
+                            namespace {                                                                                           \
+                            class UMBA_CONCAT(UmbaTest_, __LINE__){                                                               \
+                                public:                                                                                           \
+                                                                                                                                  \
+                                UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                               \
+                                    /* добавляем тест в текущую группу */                                                         \
+                                    umba::addTestToGroup( umba::UMBA_CONCAT(doTest, __LINE__), name, ::umba::getArraySize(name)); \
+                                }                                                                                                 \
+                                                                                                                                  \
+                                                                                                                                  \
+                            };                                                                                                    \
+                            static UMBA_CONCAT(UmbaTest_, __LINE__) UMBA_CONCAT(umbaTest_, __LINE__);                             \
+                            }                                                                                                     \
                             static const char * umba::UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName)
 
 

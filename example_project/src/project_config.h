@@ -8,7 +8,7 @@
 
 #include "mcu_support_package/inc/stm32f10x.h"
 
-#include "global_macros/global_macros.h"
+//#include "global_macros/global_macros.h"
 
 
 #define UMBA_USE_RETARGET
