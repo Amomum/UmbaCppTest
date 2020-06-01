@@ -1,0 +1,17 @@
+version: 2
+
+general:
+  branches:
+    only:
+      - master
+jobs:
+  build:
+    docker:
+      - image: eclipse_super_puper:latest
+    steps:
+      - checkout
+      - run:
+          name: Compile with gcc for arm
+          when: always
+          command: chmod +x ./example_project/run_tests.sh && ./example_project/run_tests.sh 
+          no_output_timeout: 1m
