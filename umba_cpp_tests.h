@@ -236,21 +236,22 @@ namespace umba                                                                  
 #define UMBA_CONCAT(x, y) UMBA_CONCAT2(x,y)
 
 
-#define UMBA_TEST( name )   namespace umba{ static const char * UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName);  }      \
-                            namespace {                                                                                           \
-                            class UMBA_CONCAT(UmbaTest_, __LINE__){                                                               \
-                                public:                                                                                           \
-                                                                                                                                  \
-                                UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                               \
-                                    /* добавляем тест в текущую группу */                                                         \
-                                    umba::addTestToGroup( umba::UMBA_CONCAT(doTest, __LINE__), name, ::umba::getArraySize(name)); \
-                                }                                                                                                 \
-                                                                                                                                  \
-                                                                                                                                  \
-                            };                                                                                                    \
-                            static UMBA_CONCAT(UmbaTest_, __LINE__) UMBA_CONCAT(umbaTest_, __LINE__);                             \
-                            }                                                                                                     \
-                            static const char * umba::UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName)
+#define UMBA_TEST( name )                                                                                 \
+    namespace umba{ static const char * UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName);  }      \
+    namespace {                                                                                           \
+    class UMBA_CONCAT(UmbaTest_, __LINE__){                                                               \
+        public:                                                                                           \
+                                                                                                          \
+        UMBA_CONCAT(UmbaTest_, __LINE__)(){                                                               \
+            /* добавляем тест в текущую группу */                                                         \
+            umba::addTestToGroup( umba::UMBA_CONCAT(doTest, __LINE__), name, ::umba::getArraySize(name)); \
+        }                                                                                                 \
+                                                                                                          \
+                                                                                                          \
+    };                                                                                                    \
+    static UMBA_CONCAT(UmbaTest_, __LINE__) UMBA_CONCAT(umbaTest_, __LINE__);                             \
+    }                                                                                                     \
+    static const char * umba::UMBA_CONCAT(doTest, __LINE__)(const char * umbaTestName)
 
 
 
@@ -276,38 +277,43 @@ namespace umba                                                                  
 
 #if UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED == 1
 
-    // fputs вместо printf, чтобы задавить warning. if(false) чтобы задавить warning
-    #define UMBA_CHECK_WITH_TEXT(test, message)    do                                               \
-                                                   {                                                \
-                                                       if (!(test))                                 \
-                                                       {                                            \
-                                                           printf("\nFailure in test: ");           \
-                                                                                                    \
-                                                           fputs(umbaTestName, stdout);             \
-                                                                                                    \
-                                                           printf("\n");                            \
-                                                           printf("%s", message);                   \
-                                                                                                    \
-                                                           UMBA_TEST_DISABLE_IRQ();                 \
-                                                           while(1)                                 \
-                                                           {                                        \
-                                                               UMBA_TEST_STOP_DEBUGGER();           \
-                                                               if(false) return message;            \
-                                                           }                                        \
-                                                        }                                           \
-                                                   } while (0)
+    // if(false) чтобы задавить warning
+    #define UMBA_CHECK_WITH_TEXT(test, message)       \
+      do                                              \
+      {                                               \
+         (void)umbaTestName;                          \
+         if (!(test))                                 \
+         {                                            \
+             printf("\nFailure in test: %s ",         \
+                     umbaTestName);                   \
+                                                      \
+             fputs(umbaTestName, stdout);             \
+                                                      \
+             printf("\n");                            \
+             printf("%s", message);                   \
+                                                      \
+             UMBA_TEST_DISABLE_IRQ();                 \
+             while(1)                                 \
+             {                                        \
+                 UMBA_TEST_STOP_DEBUGGER();           \
+                 if(false) return message;            \
+             }                                        \
+          }                                           \
+      } while (0)
 
 // или не подвисает
 #else
 
     // fputs вместо printf, чтобы задавить warning
-    #define UMBA_CHECK_WITH_TEXT(test, message)      do                         \
-                                                     {                          \
-                                                         if (!(test))           \
-                                                         {                      \
-                                                             return message;    \
-                                                         }                      \
-                                                     } while (0)
+    #define UMBA_CHECK_WITH_TEXT(test, message)  \
+      do                                         \
+      {                                          \
+         (void)umbaTestName;                     \
+         if (!(test))                            \
+         {                                       \
+             return message;                     \
+         }                                       \
+      } while (0)
 
 #endif
 
