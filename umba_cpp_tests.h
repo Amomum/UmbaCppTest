@@ -133,10 +133,9 @@ static int runLocalGroup(void)                                                  
             uint8_t offset = maxTestNameSize - namesSize[i] + 7;                              \
             printf("%s%*s%s", ::umba::RED_FG, offset, fail, ::umba::COLOR_RESET);             \
                                                                                               \
-            printf("%s\n\nIn group \"%s\" failed test \"%s\":\n",                             \
-                    ::umba::RED_BG, groupName, testNames[i]);                                 \
-            fputs(result, stdout);                                                            \
-            printf("\n\n%s", ::umba::COLOR_RESET);                                            \
+            printf("\n\n%sIn group \"%s\" failed test \"%s\":%s \n",                          \
+                    ::umba::RED_BG, groupName, testNames[i],::umba::COLOR_RESET);             \
+            printf("%s%s%s \n\n", ::umba::RED_BG, result, ::umba::COLOR_RESET);               \
             groupResult = 1;                                                                  \
         }                                                                                     \
         else                                                                                  \
