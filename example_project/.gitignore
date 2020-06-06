@@ -8,3 +8,5 @@
 *.uvguix
 *.scvd
 /Docker/
+/embedded/
+/Windows/
