@@ -4,8 +4,8 @@
 **/lst
 **/obj
 **/RTE
-*.uvgui
-*.uvguix
+*.uvgui.*
+*.uvguix.*
 *.scvd
 /Docker/
 /embedded/

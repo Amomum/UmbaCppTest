@@ -60,6 +60,16 @@ namespace
         return 0;
     }
 
+//    UMBA_TEST("This test should trigger ASAN runtime error\n")
+//    {
+//    	volatile int * a = 0;
+//
+//    	*a = 1;
+//
+//        UMBA_CHECK( true, "True is always true" );
+//        return 0;
+//    }
+
 } // anonymous namespace   
 
 #endif

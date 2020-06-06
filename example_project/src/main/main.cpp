@@ -8,6 +8,10 @@ int main(void)
 
     #ifdef USE_TESTS
     
+        // Отключение буферизации помогает тестовому выводу не смешиваться с
+        // выводом от санитайзеров
+        setvbuf(stdout, NULL, _IONBF, 0);
+        
         auto res = umba::runAllTests();
         (void)res;
 
