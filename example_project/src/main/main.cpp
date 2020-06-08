@@ -4,15 +4,16 @@
 int main(void)
 {
 
-    // TODO добавь макросы для ловли ассертов
-
     #ifdef USE_TESTS
     
-        // Отключение буферизации помогает тестовому выводу не смешиваться с
-        // выводом от санитайзеров
-        setvbuf(stdout, NULL, _IONBF, 0);
+        #ifdef USE_DOCKER
+            // Отключение буферизации помогает тестовому выводу не смешиваться с
+            // выводом от санитайзеров
+            // почему-то в Кейле этот вызов приводит к каким-то странным последствиям
+            setvbuf(stdout, NULL, _IONBF, 0);
+        #endif
         
-        auto res = umba::runAllTests();
+        int res = umba::runAllTests();
         (void)res;
 
         #ifdef USE_DOCKER

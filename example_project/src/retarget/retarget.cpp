@@ -37,7 +37,7 @@ extern "C"
             /* User can add his own implementation to report the file name and line number,
              ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
-            UMBA_ASSERT_FAIL();
+            while(1) { __BKPT(0xAB); }
         }
     #endif
 
@@ -45,13 +45,13 @@ extern "C"
     #if (USE_ASSERT_INFO == 1)    
         void assert_failed(uint32_t file_id, uint32_t line)
         {
-            UMBA_ASSERT_FAIL();
+            while(1) { __BKPT(0xAB); }
         }
     #elif (USE_ASSERT_INFO == 2)
 
         void assert_failed(uint32_t file_id, uint32_t line, const uint8_t * expr);
         {
-            UMBA_ASSERT_FAIL();
+            while(1) { __BKPT(0xAB); }
         }
     #endif 
 
