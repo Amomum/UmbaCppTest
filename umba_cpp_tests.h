@@ -304,7 +304,6 @@ namespace umba                                                                  
 // или не подвисает
 #else
 
-    // fputs вместо printf, чтобы задавить warning
     #define UMBA_CHECK_WITH_TEXT(test, message)  \
       do                                         \
       {                                          \
@@ -347,3 +346,62 @@ namespace umba                                                                  
 #endif
 
 #define UMBA_CHECK_CALL( call ) { auto r = call; UMBA_CHECK( r == nullptr, r ); }
+
+
+// ассерты
+#if defined UMBA_ENABLE_ASSERT_EXCEPTIONS
+
+    #define UMBA_ASSERT( statement )                                               \
+        do                                                                         \
+        {                                                                          \
+            if(! (statement) )                                                     \
+            {                                                                      \
+                printf("\nUmba Assertion failed in " __FILE__ ":%d\n", __LINE__ ); \
+                throw ::umba::AssertionFailedException();                          \
+            }                                                                      \
+        } while(0)
+
+    #include <exception>
+
+    namespace umba
+    {
+        class AssertionFailedException : public std::exception
+        { };
+    }
+
+    #define UMBA_CHECK_ASSERTION( expression, message )       \
+    try                                                       \
+    {                                                         \
+        { expression; }                                       \
+                                                              \
+        UMBA_CHECK( false, message );                         \
+    }                                                         \
+    catch( ::umba::AssertionFailedException & e )             \
+    { }
+
+#elif UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED
+
+    #define UMBA_ASSERT( statement ) \
+        do { if(! (statement) ) { UMBA_TEST_DISABLE_IRQ(); while(1){ UMBA_TEST_STOP_DEBUGGER(); if(0) break;} }  } while(0)
+
+#else
+    #define UMBA_ASSERT( statement ) UMBA_USER_DEFINED_ASSERT( statement )
+#endif
+
+
+// статические ассерты
+
+#if defined UMBA_USE_RUNTIME_STATIC_ASSERT
+
+    #define UMBA_STATIC_ASSERT( condition, msg ) UMBA_ASSERT( condition, "static assertion " msg )
+
+#else
+
+    #if __cplusplus < 201103L
+        #define UMBA_STATIC_ASSERT( condition, msg ) typedef char umba_static_assertion_##msg[(condition)?1:-1]
+        #define UMBA_STATIC_ASSERT3(X, L) UMBA_STATIC_ASSER(X, at_line_##L)
+        #define UMBA_STATIC_ASSERT2(X, L) UMBA_STATIC_ASSERT3(X, L)
+    #else
+        #define UMBA_STATIC_ASSERT( condition, msg ) static_assert( condition, msg )
+    #endif
+#endif

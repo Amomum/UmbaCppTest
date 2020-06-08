@@ -10,10 +10,21 @@
     #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      1
     #define UMBA_TEST_DISABLE_IRQ()                    __disable_irq()
     #define UMBA_TEST_STOP_DEBUGGER()                  __BKPT(0xAA)
+    
+    #define UMBA_ENABLE_ASSERT_EXCEPTIONS
 #else
+
+    #include <assert.h>
+
     #define UMBA_TEST_HANG_ON_FAILED_TEST_ENABLED      0
     #define UMBA_TEST_DISABLE_IRQ()
     #define UMBA_TEST_STOP_DEBUGGER()
+
+    #define UMBA_USER_DEFINED_ASSERT( statement ) assert( statement )
+
+    // заменяем ассерты на исключение
+    #define UMBA_ENABLE_ASSERT_EXCEPTIONS
+
 #endif
 
 namespace umba
