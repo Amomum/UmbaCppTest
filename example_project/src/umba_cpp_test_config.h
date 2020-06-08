@@ -10,24 +10,29 @@
 #define UMBA_TEST_LOGGING_ENABLED        1
 
 #ifndef USE_DOCKER
+    // Симулятор Кейла
+    
     #define UMBA_TEST_STOP_DEBUGGER_ON_FAILED_TEST_ENABLED      1
     #define UMBA_TEST_DISABLE_IRQ()                             __disable_irq()
     #define UMBA_TEST_STOP_DEBUGGER()                           __BKPT(0xAA)
     
-    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS
+    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS                  1
+    #define UMBA_USE_RUNTIME_STATIC_ASSERT                      1
+    
 #else
-
+    // Docker с обычным gcc
     #include <assert.h>
 
     #define UMBA_TEST_STOP_DEBUGGER_ON_FAILED_TEST_ENABLED      0
     #define UMBA_TEST_DISABLE_IRQ()
     #define UMBA_TEST_STOP_DEBUGGER()
 
-    #define UMBA_TEST_USER_DEFINED_ASSERT( statement ) assert( statement )
+    #define UMBA_TEST_USER_DEFINED_ASSERT( statement )           assert( statement )
 
     // заменяем ассерты на исключение
-    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS
-
+    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS                   1
+    #define UMBA_USE_RUNTIME_STATIC_ASSERT                       1
+    
 #endif
 
 namespace umba

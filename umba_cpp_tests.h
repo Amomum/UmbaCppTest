@@ -211,6 +211,9 @@ namespace umba
             const char * result = tests[i]( testNames[i] );                                       \
                                                                                                   \
             teardown();                                                                           \
+            /* Чтобы Кейл предупреждение про неиспользуемый статический массив не кидал */        \
+            volatile uint8_t dummy = namesSize[i];                                                \
+            (void)dummy;                                                                          \
                                                                                                   \
             /* какой-то тест провалился - выводим сообщение об ошибке */                          \
             /* в режиме с остановкой - тест сам выведет сообщение*/                               \
@@ -378,7 +381,7 @@ namespace umba                                                                  
 
 
 /***************************************************************************************************
-               Макрос для проверок в вспмогательной функции
+               Макрос для проверок в вспомогательной функции
 
  Если проверяемое условие ложно, то он либо подвисает, либо прокидывает сообщение об ошибке наверх.
  Вызов проверяемой функции должен быть обернут в UMBA_CHECK_CALL( function() )
@@ -416,7 +419,21 @@ namespace umba                                                                  
 
 #endif
 
-#define UMBA_CHECK_CALL( call ) { auto r = call; UMBA_CHECK( r == nullptr, r ); }
+/***************************************************************************************************
+               Макрос, в который нужно оборачивать вызов вспомогательной функции с проверкой
+               
+ const char * checkSomething()
+ {
+    UMBA_CHECK_F( a == b, "blah blah" );
+    return 0;
+ }
+
+ ...
+
+ UMBA_CHECK_CALL( checkSomething() ); 
+               
+***************************************************************************************************/
+#define UMBA_CHECK_CALL( call ) { const char * r = call; UMBA_CHECK( r == UMBA_TEST_OK, r ); }
 
 
 /***************************************************************************************************
@@ -432,7 +449,7 @@ namespace umba                                                                  
     - иначе - дергает UMBA_TEST_USER_DEFINED_ASSERT
 
 ***************************************************************************************************/
-#if defined UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS
+#if UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS == 1
 
     #define UMBA_ASSERT( statement )                                               \
         do                                                                         \
@@ -487,10 +504,13 @@ namespace umba                                                                  
 
   - в остальных случаях превращается либо в static_assert либо в костыль для С++03
 
-***************************************************************************************************/
-#if defined UMBA_USE_RUNTIME_STATIC_ASSERT
+  К сожалению, для костыля в стиле С++03 msg не может быть строковым литералом, а должен быть типа
+  reason_for_assert, потому что он приклеивается к имени типа
 
-    #define UMBA_STATIC_ASSERT( condition, msg ) UMBA_ASSERT( condition, "static assertion " msg )
+***************************************************************************************************/
+#if UMBA_USE_RUNTIME_STATIC_ASSERT == 1
+
+    #define UMBA_STATIC_ASSERT( condition, msg ) UMBA_ASSERT( condition )
 
 #else
 

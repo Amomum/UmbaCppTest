@@ -40,6 +40,18 @@ namespace
         UMBA_ASSERT( false );
     }
 
+    void functionThatStaticAsserts()
+    {
+        UMBA_STATIC_ASSERT(false, error_description_in_cpp03_style );
+    }
+
+    const char * functionThatContainsCheck( bool state )
+    {
+        UMBA_CHECK_F( state == false, "state should be false");
+
+        return UMBA_TEST_OK;
+    }
+
 
 
     /***************************************************************************************************
@@ -60,13 +72,27 @@ namespace
         return 0;
     }
     
-    UMBA_TEST("Calling functionThatAsserts - should assert")
+    UMBA_TEST("Calling auxillary function that checks something - should pass")
+    {
+        UMBA_CHECK_CALL( functionThatContainsCheck( false ) );
+
+        return 0;
+    }
+
+    UMBA_TEST("Calling function that asserts - should assert")
     {    
         UMBA_CHECK_ASSERTION( functionThatAsserts(), "" );
 
         return 0;
     }
     
+    UMBA_TEST("Calling function that statically asserts - should assert")
+    {
+        UMBA_CHECK_ASSERTION( functionThatStaticAsserts(), "" );
+
+        return 0;
+    }
+
     UMBA_TEST("This test will always fail")
     {
         UMBA_CHECK( false, "Who's fault is it? It's SEGMENTATION FAULT!" );
