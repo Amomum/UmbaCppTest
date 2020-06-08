@@ -76,13 +76,13 @@
 #endif
 
 // использование исключений в ассертах - чтобы ассерт можно было протестировать
-#ifndef UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS
-    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS  0
+#ifndef UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED
+    #define UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED  0
 #endif
 
 // заменять ли статический ассерт на рантаймовый - опять же, чтобы его можно было протестировать
-#ifndef UMBA_USE_RUNTIME_STATIC_ASSERT
-    #define UMBA_USE_RUNTIME_STATIC_ASSERT   0
+#ifndef UMBA_RUNTIME_STATIC_ASSERT_ENABLED
+    #define UMBA_RUNTIME_STATIC_ASSERT_ENABLED   0
 #endif
 
 /***************************************************************************************************
@@ -440,7 +440,7 @@ namespace umba                                                                  
                Макрос для ассерта - UMBA_ASSERT
 
  Если проверяемое условие ложно, то он:
-    - если включено UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS - то кидает исключение, которое можно поймать
+    - если включено UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED - то кидает исключение, которое можно поймать
       с помощью UMBA_CHECK_ASSERTION
 
     - если включено UMBA_TEST_STOP_DEBUGGER_ON_FAILED_TEST_ENABLED, то останавливает отладчик
@@ -449,7 +449,7 @@ namespace umba                                                                  
     - иначе - дергает UMBA_TEST_USER_DEFINED_ASSERT
 
 ***************************************************************************************************/
-#if UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS == 1
+#if UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED == 1
 
     #define UMBA_ASSERT( statement )                                               \
         do                                                                         \
@@ -472,7 +472,7 @@ namespace umba                                                                  
     /***************************************************************************************************
                Макрос для тестирования ассертов
 
-     Чтобы он работал, необходимо разрешить исключения и разрешить UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS
+     Чтобы он работал, необходимо разрешить исключения и разрешить UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED
 
     ***************************************************************************************************/
 
@@ -499,7 +499,7 @@ namespace umba                                                                  
 /***************************************************************************************************
            Макрос для статического ассерта
 
-  - если вы хотите тестировать статические ассерты, включите UMBA_USE_RUNTIME_STATIC_ASSERT;
+  - если вы хотите тестировать статические ассерты, включите UMBA_RUNTIME_STATIC_ASSERT_ENABLED;
     в таком случае статический ассерт превратится в обычный и его можно тестировать как обычный
 
   - в остальных случаях превращается либо в static_assert либо в костыль для С++03
@@ -508,7 +508,7 @@ namespace umba                                                                  
   reason_for_assert, потому что он приклеивается к имени типа
 
 ***************************************************************************************************/
-#if UMBA_USE_RUNTIME_STATIC_ASSERT == 1
+#if UMBA_RUNTIME_STATIC_ASSERT_ENABLED == 1
 
     #define UMBA_STATIC_ASSERT( condition, msg ) UMBA_ASSERT( condition )
 

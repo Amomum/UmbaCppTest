@@ -16,8 +16,8 @@
     #define UMBA_TEST_DISABLE_IRQ()                             __disable_irq()
     #define UMBA_TEST_STOP_DEBUGGER()                           __BKPT(0xAA)
     
-    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS                  1
-    #define UMBA_USE_RUNTIME_STATIC_ASSERT                      1
+    #define UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED                  1
+    #define UMBA_RUNTIME_STATIC_ASSERT_ENABLED                      1
     
 #else
     // Docker с обычным gcc
@@ -30,8 +30,8 @@
     #define UMBA_TEST_USER_DEFINED_ASSERT( statement )           assert( statement )
 
     // заменяем ассерты на исключение
-    #define UMBA_TEST_ENABLE_ASSERT_EXCEPTIONS                   1
-    #define UMBA_USE_RUNTIME_STATIC_ASSERT                       1
+    #define UMBA_TEST_ASSERT_WITH_EXCEPTION_ENABLED                   1
+    #define UMBA_RUNTIME_STATIC_ASSERT_ENABLED                       1
     
 #endif
 
