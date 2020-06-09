@@ -1,4 +1,4 @@
-[![amomum](https://circleci.com/gh/amomum/UmbaCppTest.svg?style=shield)](https://circleci.com/gh/amomum/UmbaCppTest)
+[![Amomum](https://circleci.com/gh/Amomum/UmbaCppTest.svg?style=shield)](https://circleci.com/gh/Amomum/UmbaCppTest)
 
 # UmbaCppTest
 Это небольшой велосипедный тестовый фреймворк для С++. Работает в С++03, для вывода результатов используется printf. Поддерживает uVision Keil (5 и 6 версии компилятора) и gcc - остальные компиляторы не проверялись, но особых проблем не ожидается.
