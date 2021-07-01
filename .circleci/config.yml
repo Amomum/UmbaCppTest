@@ -7,7 +7,7 @@ general:
 jobs:
   build:
     docker:
-      - image: amomum/ubuntu_eclipse_asan:0.1
+      - image: amomum/ubuntu_eclipse_asan:0.2
     steps:
       - checkout
       - run:
