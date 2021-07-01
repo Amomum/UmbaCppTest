@@ -2,6 +2,7 @@ FROM ubuntu:19.10
 
 # Install java, gcc & sanitizer
 RUN apt-get update && apt-get install -y default-jdk \
+    git-all \
     gcc g++ \
     libasan5 \
     gcc-arm-none-eabi \
